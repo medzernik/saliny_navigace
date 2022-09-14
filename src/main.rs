@@ -2,11 +2,7 @@ mod cache;
 mod pseudo_database;
 
 fn main() {
-    println!("Hello, world!");
+    cache::cache_booger();
 }
-
-
-
-
 
 // UwU <3
