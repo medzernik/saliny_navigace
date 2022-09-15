@@ -13,42 +13,6 @@ pub fn cache_booger() {
 
     //get_data(line_number);
 
-    /*
-        data
-        let result = fn(data[0]=5) -> data_changed
-
-        ------
-
-
-        let data
-
-        fn(&mut data) -> (){
-            *data = 5
-        }
-
-
-        inf &
-
-        || && ^
-
-        || ----
-
-        match x{
-        1|4 =>
-        5|6 =>
-        _   =>
-        1 &mut
-
-        data.get() = suddenly_different
-
-
-
-
-
-
-
-     */
-
 
 
     println!("Result of cache: {}", get_data());
