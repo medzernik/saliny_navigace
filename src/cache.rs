@@ -15,11 +15,26 @@ pub fn cache_booger() {
 
 
 
-    println!("Result of cache: {}", get_data());
+    //println!("Result of cache: {}", get_data());
 
     let mut map: HashMap<i32, String> = HashMap::new();
+    read_file_populate_cache(&mut map);
 
-    println!("{}", read_cache(&mut map));
+    let mut output = read_cache(&mut map);
+    if output == "Not found" {
+        println!("Populating cache, please wait...");
+        read_file_populate_cache(&mut map);
+        std::thread::sleep(std::time::Duration::from_secs(1));
+        output = read_cache(&mut map);
+        if output == "Not found" {
+            println!("Still not found, sorry");
+        } else {
+            println!("Result of cache: {}", output);
+        }
+    }
+    else {
+        println!("Result of cache: {}", output);
+    }
 }
 
 fn read_cache(map: &mut HashMap<i32, String>) -> &str{
@@ -34,13 +49,10 @@ fn read_cache(map: &mut HashMap<i32, String>) -> &str{
 
     match map.get(&input) {
         Some(value) => value,
-        None => {
-            println!("Waiting for cache population");
-            read_file_populate_cache(map);
-        }
+        None => "Not found",
     }
 
-    return map.get(&input).unwrap();
+
 }
 
 fn read_file_populate_cache(return_hash: &mut HashMap<i32, String>)  {
