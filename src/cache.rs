@@ -5,39 +5,29 @@ use std::io::prelude::*;
 use std::io::BufReader;
 
 pub fn cache_booger() {
-    /*let mut input = String::new();
-    std::io::stdin()
-        .read_line(&mut input)
-        .expect("Failed to read line");
-    let input: i32 = input.trim().parse().expect("Please put in a number");*/
-
-    //get_data(line_number);
-
-
-
-    //println!("Result of cache: {}", get_data());
 
     let mut map: HashMap<i32, String> = HashMap::new();
-    read_file_populate_cache(&mut map);
-
-    let mut output = read_cache(&mut map);
-    if output == "Not found" {
-        println!("Populating cache, please wait...");
-        read_file_populate_cache(&mut map);
-        std::thread::sleep(std::time::Duration::from_secs(1));
-        output = read_cache(&mut map);
+    //read_file_populate_cache(&mut map);
+    loop {
+        let mut output = read_cache(&mut map);
         if output == "Not found" {
-            println!("Still not found, sorry");
+            println!("Populating cache, please wait...");
+            read_file_populate_cache(&mut map);
+            std::thread::sleep(std::time::Duration::from_secs(1));
+            output = read_cache(&mut map);
+            match output {
+                "Not found" => println!("Still not found, sorry"),
+                _ => println!("Result of cache: {}", output),
+            }
+
         } else {
             println!("Result of cache: {}", output);
         }
     }
-    else {
-        println!("Result of cache: {}", output);
-    }
+
 }
 
-fn read_cache(map: &mut HashMap<i32, String>) -> &str{
+fn read_cache(map: &mut HashMap<i32, String>) -> &str {
     let mut input = String::new();
 
     println!("Input what you want");
@@ -51,12 +41,10 @@ fn read_cache(map: &mut HashMap<i32, String>) -> &str{
         Some(value) => value,
         None => "Not found",
     }
-
-
 }
 
-fn read_file_populate_cache(return_hash: &mut HashMap<i32, String>)  {
-       let file = File::open(r"week-05\lecture-review.md").expect("error opening the file");
+fn read_file_populate_cache(return_hash: &mut HashMap<i32, String>) {
+    let file = File::open(r"week-05\lecture-review.md").expect("error opening the file");
     let reader = BufReader::new(file);
 
     //old function
