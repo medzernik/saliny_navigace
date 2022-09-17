@@ -4,11 +4,9 @@ use std::hash::Hash;
 use std::io::prelude::*;
 use std::io::BufReader;
 
-
 /// Cache booger creates a HashMap and then it either gets the data from the cache, or populates
 /// the cache by reading from the file.
 pub fn cache_booger() {
-
     let mut map: HashMap<i32, String> = HashMap::new();
     //read_file_populate_cache(&mut map);
     loop {
@@ -22,12 +20,10 @@ pub fn cache_booger() {
                 "Not found" => println!("Still not found, sorry"),
                 _ => println!("Result of cache: {}", output),
             }
-
         } else {
             println!("Result of cache: {}", output);
         }
     }
-
 }
 
 fn read_cache(map: &mut HashMap<i32, String>) -> &str {
