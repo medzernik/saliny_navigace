@@ -119,6 +119,4 @@ fn delete_animal(database: &mut Vec<Animal>) {
         }
         None => println!("{} not in database", &user_input_name),
     }
-
-    //database = database.iter().filter(|x| {});
 }
