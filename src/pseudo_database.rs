@@ -1,11 +1,10 @@
-use std::io::prelude::*;
-use std::io::BufReader;
-use std::fs::File;
+
 
 pub fn start_database_interaction() {
     create_pseudo_database();
 }
 
+#[derive(Debug)]
 struct Animal {
     name: String,
     species: String,
@@ -17,53 +16,72 @@ fn create_pseudo_database() {
     let mut database: Vec<Animal> = Vec::new();
 
     loop {
-        println!(
-            "Select what you want to do:\n
-        1 to enter a new animal\n
-        2 to find an animal by name\n
-        3 to delete an animal by name"
-        );
 
-        let input: i32 = get_user_input(
+        let input = get_user_input(
             "Select what you want to do:\n
         1 to enter a new animal\n
         2 to find an animal by name\n
         3 to delete an animal by name",
-        )
-        .input;
+        );
 
-        println!("Input was: {}", input);
+        let input: u8 = input.trim().parse().expect("Not a number");
 
-        /*
+        println!("\nInput was: {}\n", input);
+
+
         match input {
-            1 => {}
-            2 => {}
-            3 =>{}
+            1 => {create_animal(&mut database)}
+            2 => {search_animal(&database)}
+            3 => {delete_animal(&mut database)}
+            _ => continue
 
         }
 
-         */
+
     }
 }
 
 
 ///should be generic and write out stuff. Which it does right now.
-fn get_user_input(display_text: &str) -> {
+fn get_user_input(display_text: &str) -> String {
+    println!("{}", display_text);
 
+    let mut buffer: String = String::new();
+    let  input: String = std::io::stdin()
+        .read_line(&mut buffer)
+        .expect("Failed to read line").to_string();
+
+    let input: String = input.trim().parse().unwrap();
+
+    return input;
 }
 
 fn create_animal(database: &mut Vec<Animal>) {
-    let user_input = get_user_input("Please put the name of the animal").input;
-    println!("Input was: {}", user_input);
+    //get name
+    let user_input_name = get_user_input("Please put the name of the animal");
+    //get species
+    let user_input_species = get_user_input("Please put the name of the animal");
+    //get age and convert
+    let user_input_age = get_user_input("Please put the name of the animal");
+    let user_input_age: u16 = user_input_age.trim().parse().expect("Invalid symbol (outside u16");
+
+    //get weight and convert
+    let user_input_weight = get_user_input("Please put the name of the animal");
+    let user_input_weight: f64 = user_input_weight.trim().parse().expect("Invalid symbol (outside f64");
+
+
     let animal1 = Animal {
-        name: "Otter".to_string(),
-        species: "Otterus".to_string(),
-        age: 2,
-        weight: 15.6,
+        name: user_input_name,
+        species: user_input_species,
+        age: user_input_age,
+        weight: user_input_weight,
     };
+
+
+    println!("{:?}", animal1);
     database.push(animal1);
 }
 
-fn search_animal(database: &mut Vec<Animal>) {}
+fn search_animal(database: &Vec<Animal>) {}
 
 fn delete_animal(database: &mut Vec<Animal>) {}
