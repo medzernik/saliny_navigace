@@ -46,23 +46,10 @@ fn create_pseudo_database() {
     }
 }
 
-struct UserInput<T> {
-    input: T,
-}
 
 ///should be generic and write out stuff. Which it does right now.
-fn get_user_input<T>(display_text: &str) -> UserInput<T> {
-    println!("{}", display_text);
-    let mut buffer = String::new();
+fn get_user_input(display_text: &str) -> {
 
-    let mut input: String = std::io::stdin()
-        .read_line(&mut buffer)
-        .expect("Failed to read line").to_string();
-
-    let input = input.parse().expect("Invalid input type");
-
-
-    return input;
 }
 
 fn create_animal(database: &mut Vec<Animal>) {
