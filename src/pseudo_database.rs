@@ -30,7 +30,7 @@ fn create_pseudo_database() {
     loop {
         let input = get_user_input(
             "Select what you want to do:\n
-        1 to enter a new animal\n
+        1 to add a new animal\n
         2 to find an animal by name\n
         3 to delete an animal by name",
         );
@@ -56,9 +56,16 @@ fn create_pseudo_database() {
 
 fn create_animal(database: &mut Vec<Animal>) {
     //get name
-    let user_input_name = get_user_input("Please put the name of the animal");
+    let mut user_input_name;
+    loop{
+        user_input_name = get_user_input("Please put the name of the animal");
+        if database.iter().any(|x| x.name == user_input_name) {
+            println!("Name already in database, please enter a new name");
+        }
+        else { break; }
+    }
     //get species
-    let user_input_species = get_user_input("Please put the name of the animal");
+    let user_input_species = get_user_input("Please put the species of the animal");
     //get age and convert
     let user_input_age = get_user_input("Please put the age of the animal");
     let user_input_age: u16 = user_input_age
