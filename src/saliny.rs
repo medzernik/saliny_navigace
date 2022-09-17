@@ -40,6 +40,13 @@ fn is_station_on_line(line: &TramLine, station: &TramStation) -> bool {
     line.stations.contains(station)
 }
 
+fn next_station(line: &TramLine, station: &TramStation) {
+    let index = line.stations.iter().position(|x| x == station).unwrap();
+    if index < line.stations.len()-1 {
+        println!("The next station is: {}", line.stations[index + 1].station_name);
+    }
+}
+
 fn list_common_stations(line1: &TramLine, line2: &TramLine) {
     line1.stations.iter().for_each(|station| {
         if is_station_on_line(line2, station) {
