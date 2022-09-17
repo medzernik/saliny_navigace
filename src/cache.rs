@@ -4,6 +4,9 @@ use std::hash::Hash;
 use std::io::prelude::*;
 use std::io::BufReader;
 
+
+/// Cache booger creates a HashMap and then it either gets the data from the cache, or populates
+/// the cache by reading from the file.
 pub fn cache_booger() {
 
     let mut map: HashMap<i32, String> = HashMap::new();
