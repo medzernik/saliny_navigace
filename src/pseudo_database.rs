@@ -1,19 +1,17 @@
 pub fn start_database_interaction() {
     create_pseudo_database();
 }
-///Gets users' text.
+
+///Gets user's text.
 fn get_user_input(display_text: &str) -> String {
-    println!("{}", display_text);
+    println!("{}\n", display_text);
 
     let mut buffer: String = String::new();
-    let input: String = std::io::stdin()
+
+    std::io::stdin()
         .read_line(&mut buffer)
-        .expect("Failed to read line")
-        .to_string();
-
-    let input: String = input.trim().parse().unwrap();
-
-    return input;
+        .expect("Invalid type");
+    buffer.trim().to_string()
 }
 
 #[derive(Debug)]
@@ -28,23 +26,34 @@ fn create_pseudo_database() {
     let mut database: Vec<Animal> = Vec::new();
 
     loop {
-        let input = get_user_input(
-            "Select what you want to do:\n
-        1 to add a new animal\n
-        2 to find an animal by name\n
+        let user_input = get_user_input(
+            "Select what you want to do:
+        1 to add a new animal
+        2 to find an animal by name
         3 to delete an animal by name",
         );
 
-        let input: u8 = input.trim().parse().expect("Not a number");
+        let user_input: u8 = match user_input.trim().parse::<u8>() {
+            Ok(T) => T,
+            Err(E) => {
+                println!("Error: {}", E);
+                continue;
+            }
+        };
 
-        println!("\nInput was: {}\n", input);
-
-        match input {
+        match user_input {
             1 => create_animal(&mut database),
             2 => {
-                let input = get_user_input("Enter the search term\n");
+                let input_2 = get_user_input("Enter the search term\n");
+                let result_of_search = match search_animal(&database, &input_2) {
+                    Some(T) => T,
+                    None => {
+                        println!("No animal found");
+                        continue;
+                    }
+                };
 
-                println!("Result: {:?}", search_animal(&database, input));
+                println!("Result: {:?}", result_of_search.1);
             }
             3 => delete_animal(&mut database),
             _ => continue,
@@ -52,20 +61,20 @@ fn create_pseudo_database() {
     }
 }
 
-
-
 fn create_animal(database: &mut Vec<Animal>) {
-    //get name
+    //get name - name is also the primary key, duplicity check below.
     let mut user_input_name;
-    loop{
+    loop {
         user_input_name = get_user_input("Please put the name of the animal");
         if database.iter().any(|x| x.name == user_input_name) {
             println!("Name already in database, please enter a new name");
+        } else {
+            break;
         }
-        else { break; }
     }
     //get species
     let user_input_species = get_user_input("Please put the species of the animal");
+
     //get age and convert
     let user_input_age = get_user_input("Please put the age of the animal");
     let user_input_age: u16 = user_input_age
@@ -91,18 +100,24 @@ fn create_animal(database: &mut Vec<Animal>) {
     database.push(animal1);
 }
 
-fn search_animal(database: &Vec<Animal>, animal_name: String) -> Option<(usize, &Animal)> {
-    database.iter().enumerate().find(|&(_, x)| x.name == animal_name)
+fn search_animal<'a>(
+    database: &'a Vec<Animal>,
+    animal_name: &'a String,
+) -> Option<(usize, &'a Animal)> {
+    database
+        .iter()
+        .enumerate()
+        .find(|&(_, x)| x.name == *animal_name)
 }
 
 fn delete_animal(database: &mut Vec<Animal>) {
     let user_input_name = get_user_input("Please put the name of the animal you wish to delete");
-    if database.iter().any(|x| x.name != user_input_name) {
-        database.retain(|x| x.name != user_input_name);
-        println!("Animal deleted");
-    }
-    else {
-        println!("Name not in database");
+    match search_animal(database, &user_input_name) {
+        Some((index, _)) => {
+            database.remove(index);
+            println!("Animal deleted");
+        }
+        None => println!("{} not in database", &user_input_name),
     }
 
     //database = database.iter().filter(|x| {});
