@@ -3,7 +3,7 @@ use chrono::{Date, DateTime, Utc};
 
 struct TramStation<'a> {
     station_name: String,
-    timetables: Vec<TimeTable>,
+    timetables: Vec<TimeTable<'a>>,
     train_access: bool,
 }
 
@@ -13,10 +13,9 @@ impl <'a>PartialEq for TramStation<'a> {
     }
 }
 
-struct TramLine {
+struct TramLine<'a> {
     line_number: u16,
-    line_name: String,
-    stations: Vec<TramStation>,
+    stations: &'a Vec<TramStation<'a>>,
 }
 
 struct TimeTable<'a> {
